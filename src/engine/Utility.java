@@ -6,10 +6,13 @@ import java.util.List;
 
 public class Utility {
 	final static String startWords[] = { "for", "since", "from", "between",
-			"next", "by" };
+			"next", "by", "coming", "within" };
 	final static String calRef[] = { "year", "month", "day", "mon", "tue",
 			"wed", "thu", "fri", "sat", "sun", "jan", "feb", "mar", "apr",
 			"may", "jun", "jul", "aug", "sep", "oct", "nov", "dec" };
+	final static String offsetIndicator[] = { "last", "past", "next", "coming",
+			"by", "within" };
+	final static String rangeIndicator[] = { "to", "-" };
 
 	static enum days {
 		Mon("mon", 1), Tue("tue", 2), Wed("wed", 3), Thu("thu", 4), Fri("fri",
