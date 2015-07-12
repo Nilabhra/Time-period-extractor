@@ -1,18 +1,21 @@
 package engine;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class Utility {
-	final static String startWords[] = { "for", "since", "from", "between",
-			"next", "by", "coming", "within" };
-	final static String calRef[] = { "year", "month", "day", "mon", "tue",
-			"wed", "thu", "fri", "sat", "sun", "jan", "feb", "mar", "apr",
-			"may", "jun", "jul", "aug", "sep", "oct", "nov", "dec" };
+	final static String startWords[] = { "last", "past", "since", "from",
+			"for", "between", "next", "by", "coming", "within" };
+	final static String calRef[] = { "year", "month", "day", "week", "mon",
+			"tue", "wed", "thu", "fri", "sat", "sun", "jan", "feb", "mar",
+			"apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec" };
 	final static String offsetIndicator[] = { "last", "past", "next", "coming",
 			"by", "within" };
-	final static String rangeIndicator[] = { "to", "-" };
+	final static String rangeIndicator[] = { "to", "-", "and", "of" };
 
 	static enum days {
 		Mon("mon", 1), Tue("tue", 2), Wed("wed", 3), Thu("thu", 4), Fri("fri",
@@ -122,6 +125,54 @@ public class Utility {
 		for (int i = 0; i < startIndices.size(); i++) {
 			ret.add(Arrays.copyOfRange(words, startIndices.get(i),
 					endIndices.get(i) + 1));
+		}
+
+		return ret;
+	}
+
+	public static List<TPeriod> getPeriods(List<String[]> seg) {
+
+		List<TPeriod> ret = new ArrayList<>();
+		final String[] prev = { "last", "past" };
+		for (String[] s : seg) {
+			int dir = 1;
+			for (String temp : prev) {
+				if (s[0].toLowerCase().equals(temp)) {
+					dir = -1;
+				}
+			}
+			if (dir == 1 || dir == -1) {
+				int val = 0;
+				int in = 1;
+				if (s[1].matches("\\d+")) {
+					val = Integer.parseInt(s[1]);
+					in++;
+				} else if (s[1].matches("^[0-9].*")) {
+					val = Integer
+							.parseInt(s[1].substring(0, s[1].length() - 2));
+					in++;
+				} else {
+					String temp = null;
+					while (in < s.length) {
+						if (NumberText.isNumeric(s[in])) {
+							temp += s[in] + " ";
+							in++;
+						}
+					}
+					val = Integer.parseInt(NumberText.replaceNumbers(temp));
+				}
+				if (s[in].toLowerCase().contains("week"))
+					val *= 7;
+				else if (s[in].toLowerCase().contains("month"))
+					val *= 30;
+				else if (s[in].toLowerCase().contains("year"))
+					val *= 365;
+				else {
+					DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+					Date curr = new Date();
+
+				}
+			}
 		}
 
 		return ret;
