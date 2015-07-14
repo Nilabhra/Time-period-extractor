@@ -1,6 +1,10 @@
 package engine;
 
 public class TPeriod {
+	private String start;
+	private String end;
+	private double val;
+
 	public String getStart() {
 		return start;
 	}
@@ -25,7 +29,4 @@ public class TPeriod {
 		this.val = val;
 	}
 
-	private String start;
-	private String end;
-	private double val;
 }

@@ -4,7 +4,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Utility {
@@ -133,7 +135,7 @@ public class Utility {
 	public static List<TPeriod> getPeriods(List<String[]> seg) {
 
 		List<TPeriod> ret = new ArrayList<>();
-		final String[] prev = { "last", "past" };
+		final String[] prev = { "last", "past", "previous" };
 		for (String[] s : seg) {
 			int dir = 1;
 			for (String temp : prev) {
@@ -141,37 +143,59 @@ public class Utility {
 					dir = -1;
 				}
 			}
+			int val = 0;
+			// TODO: Write code to check if duration is in ranged form
 			if (dir == 1 || dir == -1) {
-				int val = 0;
 				int in = 1;
-				if (s[1].matches("\\d+")) {
-					val = Integer.parseInt(s[1]);
-					in++;
-				} else if (s[1].matches("^[0-9].*")) {
-					val = Integer
-							.parseInt(s[1].substring(0, s[1].length() - 2));
-					in++;
-				} else {
-					String temp = null;
-					while (in < s.length) {
-						if (NumberText.isNumeric(s[in])) {
-							temp += s[in] + " ";
+				int cal = 0;
+				for (int i = 0; i < 4; ++i) {
+					if (s[s.length - 1].contains(calRef[i].toLowerCase())) {
+						cal = i + 1;
+						break;
+					}
+				}
+				if (cal != 0) {
+					if (s[1].matches("\\d+")) {
+						val = Integer.parseInt(s[1]);
+						in++;
+					} else if (s[1].matches("^[0-9]*(nd|rd|th)$")) {
+						val = Integer.parseInt(s[1].substring(0,
+								s[1].length() - 2));
+						in++;
+					} else {
+						String temp = "";
+						while (in < s.length) {
+							if (NumberText.isNumeric(s[in])) {
+								temp += s[in] + " ";
+
+							}
 							in++;
 						}
+						val = Integer.parseInt(NumberText.replaceNumbers(temp));
 					}
-					val = Integer.parseInt(NumberText.replaceNumbers(temp));
-				}
-				if (s[in].toLowerCase().contains("week"))
-					val *= 7;
-				else if (s[in].toLowerCase().contains("month"))
-					val *= 30;
-				else if (s[in].toLowerCase().contains("year"))
-					val *= 365;
-				else {
-					DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-					Date curr = new Date();
 
 				}
+				// TODO: if the last word is a month or an year (like 2012) then
+				// use calender to find the duration
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+				if (s[s.length - 1].toLowerCase().contains("week")) {
+					val *= 7;
+				} else if (s[s.length - 1].toLowerCase().contains("month")) {
+					val *= 30;
+				} else if (s[s.length - 1].toLowerCase().contains("year")) {
+					val *= 365;
+				} else {
+
+				}
+				Calendar calc = GregorianCalendar.getInstance();
+				calc.add(Calendar.DAY_OF_YEAR, dir * val);
+				Date nDaysAgo = calc.getTime();
+				TPeriod temp = new TPeriod();
+				temp.setVal(val);
+				temp.setStart(dateFormat.format(nDaysAgo));
+				temp.setEnd(dateFormat.format(GregorianCalendar.getInstance()
+						.getTime()));
+				ret.add(temp);
 			}
 		}
 
