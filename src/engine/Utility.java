@@ -171,7 +171,9 @@ public class Utility {
 							}
 							in++;
 						}
+						System.out.println(temp);
 						val = Integer.parseInt(NumberText.replaceNumbers(temp));
+						System.out.println(val);
 					}
 
 				}
@@ -187,6 +189,7 @@ public class Utility {
 				} else {
 
 				}
+
 				Calendar calc = GregorianCalendar.getInstance();
 				Date curr = GregorianCalendar.getInstance().getTime();
 				calc.add(Calendar.DAY_OF_YEAR, dir * val);

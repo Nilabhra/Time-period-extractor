@@ -1,5 +1,6 @@
 package engine;
 
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class NumberText {
@@ -19,6 +20,12 @@ public class NumberText {
 		String[] decimal = input.split(MAGNITUDES[3]);
 		String[] millions = decimal[0].split(MAGNITUDES[2]);
 
+		for (int i = 0; i < TEENS.length; ++i) {
+			System.out.println(TEENS[i] + " " + input);
+			if (TEENS[i].equals(input.trim().toLowerCase())) {
+				return new Integer(i + 10).toString();
+			}
+		}
 		for (int i = 0; i < millions.length; i++) {
 			String[] thousands = millions[i].split(MAGNITUDES[1]);
 
@@ -146,7 +153,17 @@ public class NumberText {
 				return true;
 			}
 		}
+		for (String temp : Arrays.copyOfRange(TENS, 1, TENS.length - 1)) {
+			if (s.toLowerCase().contains(temp)) {
+				return true;
+			}
+		}
 		for (String temp : TEENS) {
+			if (s.toLowerCase().contains(temp)) {
+				return true;
+			}
+		}
+		for (String temp : MAGNITUDES) {
 			if (s.toLowerCase().contains(temp)) {
 				return true;
 			}
