@@ -171,9 +171,7 @@ public class Utility {
 							}
 							in++;
 						}
-						System.out.println(temp);
 						val = Integer.parseInt(NumberText.replaceNumbers(temp));
-						System.out.println(val);
 					}
 
 				}

@@ -21,7 +21,6 @@ public class NumberText {
 		String[] millions = decimal[0].split(MAGNITUDES[2]);
 
 		for (int i = 0; i < TEENS.length; ++i) {
-			System.out.println(TEENS[i] + " " + input);
 			if (TEENS[i].equals(input.trim().toLowerCase())) {
 				return new Integer(i + 10).toString();
 			}
